@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote Result
+{% endblock %}
+
+{% block main %}
+
+<h1>{{ name }}</h1>
+<h4><a target="_blank" href="{{ info_url }}{{ symbol }}">{{ symbol }}</a>: {{ price | usd }}</h4>
+
+{% endblock %}

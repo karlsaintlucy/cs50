@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sell
+{% endblock %}
+
+{% block main %}
+    <h1>Sell Stocks</h1>
+    
+    <table class="table">
+        <thead>
+            <th>Symbol</th>
+            <th>Name</th>
+            <th>Shares</th>
+            <th>Price</th>
+            <th>TOTAL</th>
+            <th>Shares to Sell</th>
+        </thead>
+        {% for stock in stocks -%}
+        <tr>
+            <td>
+                <a target="_blank" href="{{ info_url }}{{ stock.symbol }}">{{ stock.symbol }}</a>
+            </td>
+            <td>{{ stock.name }}</td>
+            <td>{{ stock.shares|int }}</td>
+            <td>{{ stock.current_price | usd }}</td>
+            <td>{{ stock.current_value | usd }}</td>
+            <td>
+            <form action="{{ url_for('sell') }}" method="POST">
+                <select id="dropdown" class="form-control" name="stock_to_sell">
+                    {% for qty_to_sell in range(stock.shares|int + 1) -%}
+                        <option value="{{ stock.symbol }},{{ stock.current_price }},{{ qty_to_sell }}">{{ qty_to_sell }}</option>
+                    {%- endfor %}
+                </select>
+                <button class="btn btn-primary" type="submit">Sell Shares</button>
+            </form>
+            </td>
+        </tr>
+        {%- endfor %}
+    </table>
+    
+{% endblock %}

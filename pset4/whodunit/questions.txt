@@ -1,0 +1,47 @@
+1. What’s stdint.h?
+stdint.h is a header file that allows fixed-width integer types to be used across different systems, making programs more portable.
+
+2. What’s the point of using uint8_t, uint32_t, int32_t, and uint16_t in a program?
+In this case, using these types along with typedef, we can create aliases of them that correspond to Microsoft's proprietary data
+structures used in bitmap files. Consequently, we can build structs in C that map each relevant portion of the bitmap onto data
+types we recognize.
+
+3. How many bytes is a BYTE, a DWORD, a LONG, and a WORD, respectively?
+A BYTE has 1 byte (8 bits); a DWORD has 4 bytes (32 bits); a LONG has 4 bytes (32 bits); and a WORD has 2 bytes (16 bits).
+
+4. What (in ASCII, decimal, or hexadecimal) must the first two bytes of any BMP file be? Leading bytes used to identify file formats
+(with high probability) are generally called "magic numbers."
+In ASCII, "BM"; in decimal, 66 77; in hexadecimal, 0x42 0x4d (or 424d).
+
+5. What’s the difference between bfSize and biSize?
+bfSize contains the size (in bytes) of the bitmap file; biSize containes the size (in bytes) of the BITMAPINFOHEADER (always decimal
+40 or 0x28).
+
+6. What does it mean if biHeight is negative?
+It means the bitmap starts from the upper-left corner and moves downward.
+
+7. What field in BITMAPINFOHEADER specifies the BMP’s color depth (i.e., bits per pixel)?
+The biBitCount field specifies the number of bits per pixel.
+
+8. Why might fopen return NULL in lines 24 and 32 of copy.c?
+fopen() might return NULL if the system has not given read or write permissions for the corresponding files.
+
+9. Why is the third argument to fread always 1 in our code?
+Because if we're reading a chunk of code that's specified to be as large as its corresponding header, we're going to eat it all in
+one gulp.
+
+10. What value does line 65 of copy.c assign to padding if bi.biWidth is 3?
+padding =
+(4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
+(4 - (3 * 3) % 4) % 4;
+(4 - 9 % 4) % 4;
+(4 - 1) % 4;
+3 % 4;
+3
+
+11. What does fseek do?
+It changes file position by the offset amount held by padding, from the current file position in the file pointer performing
+read functions (inptr).
+
+12. What is SEEK_CUR?
+SEEK_CUR is an integer constant that denotes the current position within the file.

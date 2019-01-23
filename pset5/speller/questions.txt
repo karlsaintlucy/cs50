@@ -1,0 +1,41 @@
+0.  What is pneumonoultramicroscopicsilicovolcanoconiosis?
+
+It's the longest word in the Oxford English Dictionary: "An invented long word said to mean a lung disease caused by inhaling very fine ash and sand dust."
+
+1.  According to its man page, what does getrusage do?
+
+It gets resource usage for a specified "who" (self, children, or thread).
+
+
+2.  Per that same man page, how many members are in a variable of type struct rusage?
+
+There are 16 members in a variable of type struct rusage.
+
+
+3.  Why do you think we pass before and after by reference (instead of by value) to calculate, even though we’re not changing their contents?
+
+Probably so that we can snag only the members of the struct rusages we need to run the calculate() function, using -> notation; we’re only using ru_utime.tv_sec and ru_utime.tv_usec within the struct rusage type.
+
+
+4.  Explain as precisely as possible, in a paragraph or more, how main goes about reading words from a file. In other words, convince us that you indeed understand how that function’s for loop works.
+
+Counter int variables: index, misspellings, and words, are initialized to 0; then, a char array, word, is initialized to length LENGTH (45, the length of the longest word in the OED), + 1, for the terminal \0 character.
+
+The for loop initializes an int, c, to grab the first character in the source text using fgetc(fp) (the get-character function, using the file pointer, fp, that was initialized earlier to read from the source text file). The loop will continue as long as c does not equal the EOF (end-of-file) character; and each iteration, it will advance one character in the source file, using fgetc(fp).
+
+The first if statement tests whether the character, c, is an alphabetic character OR if it’s an apostrophe (that also isn’t the first character in a word). If the character passes, it’s appended to word[] at index index; then, index is incremented. A further conditional arises, within the first: if index, at this point, is longer than 45 (the length of the longest word), the following while loop will advance until the string of alphabetic characters ends and then the program will reset index to 0. If this conditional evaluates to true, the for loop will iterate on the next c.
+
+A second conditional: If the character was not alphabetic or an apostrophe, a test is run to see if it’s a digit. If it is, the following while loop will advance until the string of alphanumeric characters is over, and then the program will reset index to 0. If this conditional evaluated to true, the for loop will iterate on the next c.
+
+A third conditional: if the character was not alphanumeric or an apostrophe and the index is greater than 0 (index only advances for alphabetics and apostrophes), word[] must contain a whole word at this point. The program will terminate the string with a ‘\0’ character at the current index, increment the words counter int, then run check() on the word (speed-testing it as well, using getrusage() calls). If check(word) evaluates to false, the word is misspelled, and the bool misspelled gets the value true. A calculation is run on the before and after values from the getrusage() calls around the call to check().
+
+If the word was misspelled, the word will be printed as a string and new line, and the counter for misspellings is incremented. Finally, the index is reset to 0. The for loop iterates again.
+
+
+5.  Why do you think we used fgetc to read each word’s characters one at a time rather than use fscanf with a format string like "%s" to read whole words at a time? Put another way, what problems might arise by relying on fscanf alone?
+
+Words are of variable length, and they wouldn’t be terminated with ‘\0’ in the source text, since the text is a constant stream until EOF. And since this implementation of a spell-checker limits words to alphabetic characters and apostrophes, we have a lot more control of how we define words by snagging characters one at a time and evaluating them on that basis.
+
+6.  Why do you think we declared the parameters for check and load as const (which means "constant")?
+
+We want to make sure that the char*’s passed to them can’t be locally modified, as they are pointers and store critical memory addresses for the proper functioning of the program.

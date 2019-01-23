@@ -1,0 +1,3 @@
+[submodule "excelerateAR"]
+	path = excelerateAR
+	url = git@github.com:karlsaintlucy/excelerateAR.git

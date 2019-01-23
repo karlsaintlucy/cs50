@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import helpers
+
+from analyzer import Analyzer
+from termcolor import colored
+
+def main():
+    """Implements sentiment analysis on a Twitter @user's last 50 tweets."""
+    
+    # ensure proper usage
+    if len(sys.argv) != 2:
+        sys.exit("Usage: ./tweets @screen_name")
+        
+    # absolute paths to lists
+    positives = os.path.join(sys.path[0], "positive-words.txt")
+    negatives = os.path.join(sys.path[0], "negative-words.txt")
+    
+    screen_name = sys.argv[1]
+    
+    # snag the last fifty texts and exit if there aren't any returned
+    lastfifty = helpers.get_user_timeline(screen_name, 50)
+    if lastfifty == None:
+        sys.exit("No tweets at " + screen_name + ".")
+    
+    # snag the Analyzer object
+    analyzer = Analyzer(positives, negatives)
+    
+    for i in range(len(lastfifty)):
+        tweet = lastfifty[i]
+        score = analyzer.analyze(tweet)
+        
+        if score > 0.0:
+            print(colored(":) " + tweet, "green"))
+        elif score < 0.0:
+            print(colored(":( " + tweet, "red"))
+        else:
+            print(colored(":| " + tweet, "yellow"))
+    
+if __name__ == "__main__":
+    main()

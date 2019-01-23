@@ -1,0 +1,5 @@
+SELECT users.username, stocks.symbol AS symbol, stocks.name AS name, portfolio.shares AS shares
+FROM portfolio
+INNER JOIN stocks ON portfolio.stocks_id = stocks.id
+INNER JOIN users ON portfolio.users_id = users.id
+WHERE users.id = 2;
